@@ -2,6 +2,7 @@ import { WalletConnect } from '@/components/wallet-connect';
 import { CreateVault } from '@/components/create-vault';
 import { VaultActions } from '@/components/vault-actions';
 import { RewardsPanel } from '@/components/rewards-panel';
+import { Logo } from '@/components/logo';
 
 export default function Home() {
   return (
@@ -10,11 +11,14 @@ export default function Home() {
       <header className="border-b border-gray-800 bg-black/50 backdrop-blur-lg sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                YieldForge
-              </h1>
-              <p className="text-sm text-gray-400">DeFi Yield Optimization</p>
+            <div className="flex items-center gap-3">
+              <Logo className="w-10 h-10" />
+              <div>
+                <h1 className="text-2xl font-bold text-white">
+                  YieldForge
+                </h1>
+                <p className="text-sm text-gray-400">DeFi Yield Optimization</p>
+              </div>
             </div>
             <WalletConnect />
           </div>
