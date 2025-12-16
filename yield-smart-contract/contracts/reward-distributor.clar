@@ -202,7 +202,10 @@
         (root (var-get merkle-root))
     )
         ;; Simplified merkle verification - in production would implement full tree traversal
-        (ok (is-eq leaf root))
+        (if (is-eq leaf root)
+            (ok true)
+            (err ERR-INVALID-MERKLE-PROOF)
+        )
     )
 )
 
@@ -477,7 +480,7 @@
                              (unwrap-panic (to-consensus-buff? amount)))))
     )
         (asserts! (not (get claimed claim-record)) ERR-ALREADY-CLAIMED)
-        (try! (verify-merkle-proof leaf proof u0))
+        (asserts! (unwrap! (verify-merkle-proof leaf proof u0) ERR-INVALID-MERKLE-PROOF) ERR-INVALID-MERKLE-PROOF)
         
         ;; Record claim
         (map-set airdrop-claims

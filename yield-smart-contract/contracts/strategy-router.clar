@@ -172,7 +172,7 @@
                                   (risk-rating uint))
     (begin
         (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
-        (try! (validate-protocol-address protocol-address))
+        (asserts! (validate-protocol-address protocol-address) ERR-INVALID-PROTOCOL)
         
         (map-set registered-protocols
             { protocol-address: protocol-address }
