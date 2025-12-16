@@ -1,0 +1,32 @@
+---
+id: 0
+name: Mainnet deployment
+network: mainnet
+stacks-node: "https://api.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoin.blockstack.com:8332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: reward-distributor
+            expected-sender: SPVQ61FEWR6M4HVAT3BNE07D4BNW6A1C2ACCNQ6F
+            cost: 205220
+            path: contracts/reward-distributor.clar
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: strategy-router
+            expected-sender: SPVQ61FEWR6M4HVAT3BNE07D4BNW6A1C2ACCNQ6F
+            cost: 165000
+            path: contracts/strategy-router.clar
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: vault-manager
+            expected-sender: SPVQ61FEWR6M4HVAT3BNE07D4BNW6A1C2ACCNQ6F
+            cost: 729622
+            path: contracts/vault-manager.clar
+            anchor-block-only: true
+            clarity-version: 3
+      epoch: "3.0"
