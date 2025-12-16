@@ -126,10 +126,7 @@
 
 ;; Clarity 4: Using principal-destruct? for protocol validation
 (define-private (validate-protocol-address (protocol principal))
-    (match (principal-destruct? protocol)
-        destruct-response (ok true)
-        (err false)
-    )
+    (is-ok (principal-destruct? protocol))
 )
 
 ;; Calculate rebalancing fee
@@ -183,7 +180,7 @@
                 name: name,
                 active: true,
                 total-routed: u0,
-                last-interaction-block: block-height,
+                last-interaction-block: stacks-block-height,
                 risk-rating: risk-rating
             }
         )
@@ -231,10 +228,10 @@
         (rebalancing-fee (calculate-rebalancing-fee amount))
         (net-amount (- amount rebalancing-fee))
         (source-alloc (default-to 
-            { allocated-amount: u0, last-rebalance-block: block-height, pending-withdrawal: u0 }
+            { allocated-amount: u0, last-rebalance-block: stacks-block-height, pending-withdrawal: u0 }
             (map-get? protocol-allocations { protocol-address: (get source-protocol route) })))
         (target-alloc (default-to 
-            { allocated-amount: u0, last-rebalance-block: block-height, pending-withdrawal: u0 }
+            { allocated-amount: u0, last-rebalance-block: stacks-block-height, pending-withdrawal: u0 }
             (map-get? protocol-allocations { protocol-address: (get target-protocol route) })))
     )
         (asserts! (not (var-get emergency-mode)) ERR-EMERGENCY-ONLY)
@@ -246,7 +243,7 @@
             { protocol-address: (get source-protocol route) }
             (merge source-alloc {
                 allocated-amount: (- (get allocated-amount source-alloc) amount),
-                last-rebalance-block: block-height
+                last-rebalance-block: stacks-block-height
             })
         )
         
@@ -255,7 +252,7 @@
             { protocol-address: (get target-protocol route) }
             (merge target-alloc {
                 allocated-amount: (+ (get allocated-amount target-alloc) net-amount),
-                last-rebalance-block: block-height
+                last-rebalance-block: stacks-block-height
             })
         )
         
@@ -272,7 +269,7 @@
         
         ;; Record execution history
         (map-set route-history
-            { route-id: route-id, execution-block: block-height }
+            { route-id: route-id, execution-block: stacks-block-height }
             {
                 amount-routed: amount,
                 gas-used: (get gas-cost route),
@@ -307,7 +304,7 @@
                 votes-for: u0,
                 votes-against: u0,
                 status: "pending",
-                created-block: block-height
+                created-block: stacks-block-height
             }
         )
         
@@ -362,7 +359,7 @@
             { user: tx-sender, protocol: protocol }
             {
                 amount: amount,
-                requested-block: block-height,
+                requested-block: stacks-block-height,
                 processed: false
             }
         )
@@ -399,7 +396,7 @@
             {
                 total-rebalances: u0,
                 earned-rewards: u0,
-                last-action-block: block-height,
+                last-action-block: stacks-block-height,
                 active: true
             }
         )
@@ -425,7 +422,7 @@
             { keeper-address: tx-sender }
             (merge keeper {
                 earned-rewards: u0,
-                last-action-block: block-height
+                last-action-block: stacks-block-height
             })
         )
         

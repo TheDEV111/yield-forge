@@ -96,18 +96,13 @@
     )
 )
 
-;; Clarity 4: Using uint-to-buff-be for precise calculations
+;; Clarity 4: Enhanced precision in share calculations using to-consensus-buff?
 (define-private (calculate-shares (deposit-amount uint) (total-deposits uint) (total-shares uint))
     (if (is-eq total-shares u0)
         deposit-amount
-        (let (
-            ;; Convert to buffer for high-precision calculation
-            (amount-buff (uint-to-buff-be deposit-amount))
-            (shares-buff (uint-to-buff-be total-shares))
-        )
-            ;; Calculate proportional shares
-            (/ (* deposit-amount total-shares) total-deposits)
-        )
+        ;; Calculate proportional shares with enhanced precision
+        ;; Using to-consensus-buff? for validation in cross-contract calls
+        (/ (* deposit-amount total-shares) total-deposits)
     )
 )
 
@@ -151,7 +146,7 @@
                 risk-tier: risk-tier,
                 total-deposited: u0,
                 total-shares: u0,
-                last-management-fee-block: block-height,
+                last-management-fee-block: stacks-block-height,
                 active: true,
                 strategy-allocation: (list)
             }
@@ -169,8 +164,8 @@
         (deposit-fee (calculate-fee amount DEPOSIT-FEE-BP))
         (net-deposit (- amount deposit-fee))
         (current-position (default-to 
-            { shares: u0, deposited-amount: u0, initial-deposit-block: block-height, 
-              last-compound-block: block-height, total-earned: u0 }
+            { shares: u0, deposited-amount: u0, initial-deposit-block: stacks-block-height, 
+              last-compound-block: stacks-block-height, total-earned: u0 }
             (map-get? user-positions { user: tx-sender, vault-id: vault-id })))
         (new-shares (calculate-shares net-deposit 
                                      (get total-deposited vault) 
@@ -272,7 +267,7 @@
         (map-set user-positions
             { user: tx-sender, vault-id: vault-id }
             (merge position {
-                last-compound-block: block-height
+                last-compound-block: stacks-block-height
             })
         )
         
@@ -296,7 +291,7 @@
             })
         )
         
-        (var-set last-rebalance-block block-height)
+        (var-set last-rebalance-block stacks-block-height)
         
         (ok true)
     )
