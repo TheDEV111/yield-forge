@@ -1,13 +1,21 @@
 [project]
 name = "yield-smart-contract"
-description = ""
+description = "YieldForge - Decentralized Yield Optimization Protocol"
 authors = []
 telemetry = true
 cache_dir = "./.cache"
 
-# [contracts.counter]
-# path = "contracts/counter.clar"
-# epoch = "latest"
+[contracts.vault-manager]
+path = "contracts/vault-manager.clar"
+epoch = "3.0"
+
+[contracts.strategy-router]
+path = "contracts/strategy-router.clar"
+epoch = "3.0"
+
+[contracts.reward-distributor]
+path = "contracts/reward-distributor.clar"
+epoch = "3.0"
 
 [repl.analysis]
 passes = ["check_checker"]

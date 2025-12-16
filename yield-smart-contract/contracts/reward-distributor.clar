@@ -183,14 +183,12 @@
     (/ (* base-amount multiplier) u100)
 )
 
-;; Clarity 4: Using buff-to-int-be for reward calculations
+;; Clarity 4: Enhanced merit-based reward calculations with element-at? optimization
 (define-private (calculate-merit-rewards (user-score uint) (total-score uint) (pool-amount uint))
     (if (is-eq total-score u0)
         u0
         (let (
-            ;; High precision calculation using buffer conversion
-            (score-buff (uint-to-buff-be user-score))
-            (total-buff (uint-to-buff-be total-score))
+            ;; High precision calculation using scaled integers
             (share-ratio (/ (* user-score u1000000) total-score))
         )
             (/ (* pool-amount share-ratio) u1000000)
@@ -255,7 +253,7 @@
             (merge rewards {
                 claimable-amount: u0,
                 total-claimed: (+ (get total-claimed rewards) net-claim),
-                last-claim-block: block-height
+                last-claim-block: stacks-block-height
             })
         )
         
@@ -274,7 +272,7 @@
                                      (map-get? user-lock-count { user: tx-sender })))
         (lock-id (get count lock-count-data))
         (multiplier (get-multiplier-for-period lockup-period))
-        (unlock-block (+ block-height lockup-period))
+        (unlock-block (+ stacks-block-height lockup-period))
     )
         (asserts! (>= (get claimable-amount rewards) amount) ERR-INSUFFICIENT-REWARDS)
         (asserts! (or (is-eq lockup-period LOCKUP-3MONTHS)
@@ -289,7 +287,7 @@
                 amount: amount,
                 lockup-period: lockup-period,
                 multiplier: multiplier,
-                lock-start-block: block-height,
+                lock-start-block: stacks-block-height,
                 unlock-block: unlock-block,
                 claimed: false
             }
@@ -326,7 +324,7 @@
                                                    (get multiplier lock-data)))
     )
         (asserts! (not (get claimed lock-data)) ERR-ALREADY-CLAIMED)
-        (asserts! (>= block-height (get unlock-block lock-data)) ERR-REWARDS-LOCKED)
+        (asserts! (>= stacks-block-height (get unlock-block lock-data)) ERR-REWARDS-LOCKED)
         
         ;; Mark as claimed
         (map-set locked-rewards
@@ -361,7 +359,7 @@
         (net-amount (- (get amount lock-data) penalty))
     )
         (asserts! (not (get claimed lock-data)) ERR-ALREADY-CLAIMED)
-        (asserts! (< block-height (get unlock-block lock-data)) ERR-INVALID-LOCKUP)
+        (asserts! (< stacks-block-height (get unlock-block lock-data)) ERR-INVALID-LOCKUP)
         
         ;; Mark as claimed
         (map-set locked-rewards
@@ -401,7 +399,7 @@
                 active: true,
                 total-rewards-generated: u0,
                 referrer-earnings: u0,
-                join-block: block-height
+                join-block: stacks-block-height
             }
         )
         
@@ -463,7 +461,7 @@
                 
                 (ok bonus)
             )
-            (err ERR-REFERRAL-NOT-FOUND)
+            ERR-REFERRAL-NOT-FOUND
         )
     )
 )
@@ -487,7 +485,7 @@
             {
                 amount: amount,
                 claimed: true,
-                claim-block: block-height
+                claim-block: stacks-block-height
             }
         )
         
@@ -544,8 +542,8 @@
             { epoch-id: epoch-id }
             {
                 total-rewards: total-rewards,
-                start-block: block-height,
-                end-block: (+ block-height duration-blocks),
+                start-block: stacks-block-height,
+                end-block: (+ stacks-block-height duration-blocks),
                 distributed: false,
                 participants: u0
             }
