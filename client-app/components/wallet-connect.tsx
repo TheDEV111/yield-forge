@@ -23,6 +23,15 @@ export function WalletConnect() {
             {data.address.slice(0, 6)}...{data.address.slice(-4)}
           </p>
         </div>
+        <Button 
+          onClick={disconnect} 
+          variant="outline" 
+          size="sm"
+          className="gap-2"
+        >
+          <LogOut className="w-4 h-4" />
+          Disconnect
+        </Button>
       </div>
     );
   }
