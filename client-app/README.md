@@ -1,8 +1,154 @@
-# Stacks Next.js Template
+# YieldForge Frontend
 
-A modern Next.js 15 template for building Stacks blockchain applications with TypeScript, Tailwind CSS, and comprehensive tooling.
+Minimalistic DeFi yield optimization interface for the YieldForge protocol on Stacks blockchain.
 
-## 🚀 Features
+## 🚀 Quick Start
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to access the interface.
+
+## 📦 Features
+
+### Wallet Connection
+- Connect Hiro/Leather wallet via Stacks Connect
+- View connected wallet address
+- Persistent session with localStorage
+
+### Vault Management
+- **Create Vault**: Choose from 3 risk tiers
+  - Conservative: 5-8% APY (stable protocols)
+  - Balanced: 8-15% APY (mixed strategies)
+  - Aggressive: 15%+ APY (high-yield opportunities)
+  
+- **Deposit**: Add STX to vault (min 100 STX)
+  - 0.3% deposit fee
+  - Receive vault shares proportionally
+  
+- **Withdraw**: Remove shares from vault
+  - 0.5% withdrawal fee
+  - Returns STX based on current vault value
+
+- **Compound**: Auto-reinvest rewards
+  - 0.2 STX gas fee
+  - Increases vault position
+
+### Rewards System
+- **Claim Rewards**: Withdraw earned yields (1% fee)
+- **Lock Rewards**: Earn multiplier bonuses
+  - 3 months: 1.5x multiplier (13,140 blocks)
+  - 6 months: 2x multiplier (26,280 blocks)
+  - 12 months: 3x multiplier (52,560 blocks)
+- **Unlock Rewards**: Withdraw after lockup period expires
+
+## 🔗 Deployed Contracts
+
+**Mainnet**: `SPVQ61FEWR6M4HVAT3BNE07D4BNW6A1C2ACCNQ6F`
+- `vault-manager`: Core vault operations
+- `strategy-router`: Protocol routing & governance
+- `reward-distributor`: Rewards, lockups, referrals
+
+**Testnet**: `STVQ61FEWR6M4HVAT3BNE07D4BNW6A1C2BKDND68`
+
+## 🏗️ Architecture
+
+```
+client-app/
+├── app/
+│   ├── layout.tsx         # Root layout with AuthSessionProvider
+│   └── page.tsx           # Main dashboard page
+├── components/
+│   ├── wallet-connect.tsx    # Wallet connection button
+│   ├── create-vault.tsx      # Vault creation interface
+│   ├── vault-actions.tsx     # Deposit/withdraw/compound
+│   └── rewards-panel.tsx     # Rewards claim/lock/unlock
+├── hooks/
+│   └── wallet.ts          # useWallet() hook
+├── lib/
+│   └── contracts/
+│       ├── constants.ts   # Contract addresses, fees, helpers
+│       └── transactions.ts # Contract interaction wrappers
+└── providers/
+    └── auth-session-provider.tsx # Session management
+```
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15.5.4 with App Router
+- **Blockchain**: Stacks (Clarity smart contracts)
+- **Wallet**: @stacks/connect 8.2.0
+- **UI**: Tailwind CSS 4, Radix UI
+- **Icons**: lucide-react
+
+## 📝 Usage Examples
+
+### Create a Vault
+1. Connect your Stacks wallet
+2. Select risk tier (Conservative/Balanced/Aggressive)
+3. Click "Create Vault"
+4. Confirm transaction in wallet
+
+### Deposit to Vault
+1. Enter Vault ID (starts at 1)
+2. Input deposit amount (min 100 STX)
+3. Review fees (0.3%)
+4. Click "Deposit" and confirm
+
+### Lock Rewards for Multiplier
+1. Check claimable rewards amount
+2. Choose lockup period (3/6/12 months)
+3. Enter amount to lock
+4. Click "Lock Rewards"
+5. Earn multiplied rewards (1.5x-3x)
+
+## 🔐 Security Notes
+
+- Always verify contract addresses before transactions
+- Review transaction details in wallet popup
+- Start with small amounts for testing
+- Minimum deposit: 100 STX
+- Lockup periods are enforced on-chain (no early unlock)
+
+## 📊 Fees Summary
+
+| Operation | Fee |
+|-----------|-----|
+| Deposit | 0.3% |
+| Withdrawal | 0.5% |
+| Performance | 15% |
+| Management | 2% annual |
+| Claim Rewards | 1% |
+| Referral Bonus | 5% |
+
+## 🐛 Troubleshooting
+
+**"Connect your wallet" error**
+- Ensure Hiro/Leather wallet extension is installed
+- Check wallet is on correct network (mainnet/testnet)
+
+**Transaction fails**
+- Verify sufficient STX balance (+ 0.1 STX for fees)
+- Check minimum deposit requirement (100 STX)
+- Ensure vault ID exists
+
+**Rewards not showing**
+- Wait for 1 block confirmation
+- Refresh page to update balances
+- Check transaction status on explorer
+
+## 📚 Resources
+
+- [Stacks Explorer](https://explorer.hiro.so)
+- [Stacks Connect Docs](https://docs.stacks.co/build-apps/connect)
+- [YieldForge Contracts](../yield-smart-contract)
+
+## 📄 License
+
+MIT
+
 
 - **Next.js 15** with App Router and Turbopack
 - **TypeScript** with strict configuration
